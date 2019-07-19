@@ -7,30 +7,28 @@ module.exports.getData = (param, query, done)=>{
         if (err) throw err;
         const dbo = db.db("mydb");
         const collection = dbo.collection("contactDetails");
-        const {name, phone} = query;
+        const {name, contactDetail,id} = query;
         let newPhone=[];
-        if(phone){
-            newPhone = query.phone.split(',');
-        }
+        
         if('update' === param){
-            collection.updateOne( {name},{ $set: { phone:newPhone } } ,function(err, result) {
+            collection.updateOne( {_id:id},{ $set: { phone:newPhone } } ,function(err, result) {
                 if (err) throw err;
                 db.close();
                 done(result.result);
             }); 
         }
         else if('insert' === param){
-            collection.insertOne({name, phone:newPhone } ,function(err, result) {
+            collection.insertOne({name, contactDetail: JSON.parse(contactDetail) } ,function(err, result) {
                 if (err) throw err;
                 db.close();
-                done(result.result);
+                done({ok:result.result.ok});
             }); 
         }
         else if('delete' === param){
-            collection.deleteOne( {name} ,function(err, result) {
+            collection.deleteOne( {_id:id} ,function(err, result) {
                 if (err) throw err;
                 db.close();
-                done(result.result);
+                done(result);
             }); 
         }
         else{

@@ -1,7 +1,14 @@
 var express = require('express');
+const bodyParser = require("body-parser");
 var app = express();
 var port = process.env.PORT || 8080;
 let queryDatabase = require('./queryDatabase');
+
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+
+app.use(bodyParser.json());
 
 app.get('/get', (request, response, next)=>{
     queryDatabase.getData('get', request.query, (req,res)=>{
@@ -9,25 +16,30 @@ app.get('/get', (request, response, next)=>{
     });  
 });
 
-app.get('/update', (request, response, next)=>{
-    queryDatabase.getData('update', request.query, (req,res)=>{
+app.post('/update', (request, response, next)=>{
+    queryDatabase.getData('update', request.body, (req,res)=>{
         response.json(req);
     });
 });
 
-app.get('/delete', (request, response, next)=>{
-    queryDatabase.getData('delete', request.query, (req,res)=>{
+app.post('/delete', (request, response, next)=>{
+    queryDatabase.getData('delete', request.body, (req,res)=>{
         response.json(req);
     });
 });
 
-app.get('/insert', (request, response, next)=>{
-    queryDatabase.getData('insert', request.query, (req,res)=>{
+app.post('/insert', (request, response, next)=>{
+    queryDatabase.getData('insert', request.body, (req,res)=>{
         response.json(req);
     });
 });
 
-app.get('/', (req, res) => res.send('Hello World with Express'));
+app.get('/', (req, res) =>
+{
+    res.send("Hello")
+});
+
 app.listen(port, function () {
     console.log("Running RestHub on port " + port);
 });
+

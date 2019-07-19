@@ -1,3 +1,3 @@
 module.exports = {
-    DBURL : "mongodb://localhost:27017/"
+    DBURL : "mongodb+srv://test:t@test-zcjje.azure.mongodb.net/test?retryWrites=true&w=majority"
 };
